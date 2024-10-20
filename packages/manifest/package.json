@@ -1,5 +1,5 @@
 {
-  "name": "tce-manifest",
+  "name": "@tailor-cms/ce-table-manifest",
   "description": "Tailor CMS table element",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
@@ -41,6 +41,9 @@
     "bundle": true,
     "minify": false,
     "clean": false,
-    "dts": true
+    "dts": true,
+    "publishConfig": {
+      "access": "public"
+    }
   }
 }
