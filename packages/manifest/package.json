@@ -1,6 +1,6 @@
 {
   "name": "@tailor-cms/ce-table-manifest",
-  "description": "Tailor CMS table element",
+  "description": "Tailor CMS table manifest",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
   "type": "module",
   "version": "0.0.1",
@@ -41,9 +41,9 @@
     "bundle": true,
     "minify": false,
     "clean": false,
-    "dts": true,
-    "publishConfig": {
-      "access": "public"
-    }
+    "dts": true
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

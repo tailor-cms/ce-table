@@ -1,7 +1,8 @@
-# tce-template
+# ce-table
 
-Base template for Tailor Content Element Kit. For more details see
-[docs](https://tailor-cms.github.io/xt/).
+Tailor table content element component.
+
+Make sure to set TAILOR_NEXT=true .env variable to enable Vue 3 based authoring runtime.
 
 ## Usage
 
