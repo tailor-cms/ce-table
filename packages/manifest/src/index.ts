@@ -29,7 +29,7 @@ export const initState: DataInitializer = (): ElementData => {
     rows[rowId] = row;
     times(3, (position) => {
       const cellId = uuid();
-      addCell(row, { id: cellId, position });
+      addCell(row, { id: cellId, position, data: {} });
       addEmbed(embeds, cellId, tableId);
     });
   });

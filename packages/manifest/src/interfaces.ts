@@ -8,6 +8,7 @@ export type Embeds = Record<string, Embed>;
 
 export interface Cell {
   id: string;
+  data: Record<string, any>;
   position: number;
 }
 export type Cells = Record<string, Cell>;
