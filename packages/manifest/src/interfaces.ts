@@ -1,3 +1,8 @@
+export enum Direction {
+  Before = -1,
+  After = 1,
+}
+
 export type Embed = any;
 export type Embeds = Record<string, Embed>;
 

@@ -26,10 +26,15 @@
   "devDependencies": {
     "@tailor-cms/ce-table-manifest": "workspace:*",
     "@tailor-cms/eslint-config": "0.0.2",
+    "@types/lodash": "^4.17.6",
     "@vitejs/plugin-vue": "^4.2.3",
     "typescript": "^5.1.6",
     "vite": "^4.4.5",
     "vue-tsc": "^1.8.5"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "uuid": "^11.0.5"
   },
   "publishConfig": {
     "access": "public"

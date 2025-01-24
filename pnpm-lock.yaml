@@ -63,6 +63,12 @@ importers:
 
   packages/edit:
     dependencies:
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      uuid:
+        specifier: ^11.0.5
+        version: 11.0.5
       vue:
         specifier: ^3.3.4
         version: 3.3.4
@@ -73,6 +79,9 @@ importers:
       '@tailor-cms/eslint-config':
         specifier: 0.0.2
         version: 0.0.2(kwjg6bvyxkamsvavde6mxjk73q)
+      '@types/lodash':
+        specifier: ^4.17.6
+        version: 4.17.14
       '@vitejs/plugin-vue':
         specifier: ^4.2.3
         version: 4.6.2(vite@4.5.2(@types/node@20.11.19)(sass@1.68.0))(vue@3.3.4)
