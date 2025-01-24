@@ -9,21 +9,32 @@
       />
       <span class="text-subtitle-2">{{ manifest.name }}</span>
     </VToolbar>
-    <div :class="{ disabled: isDisabled }" class="table">
-      <div v-for="row in table" :key="row.id" class="table-row">
-        <div v-for="cell in cells(row)" :key="cell.id">Cell</div>
+    <div class="body">
+      <div :class="{ disabled: isDisabled }" class="table ma-4">
+        <div v-for="row in table" :key="row.id" class="table-row">
+          <div v-for="cell in cells(row)" :key="cell.id" class="table-cell">
+            <TailorEmbeddedContainer
+              :allowed-element-config="embedElementConfig"
+              :container="{ embeds: { [cell.id]: cell } }"
+              :enable-add="false"
+              :is-disabled="isDisabled"
+              @save="saveCell($event.embeds[cell.id])"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </VCard>
 </template>
 
 <script setup lang="ts">
-import { computed, inject } from 'vue';
+import { computed, inject, reactive } from 'vue';
 import manifest, {
   Cell,
   Cells,
   Direction,
   Element,
+  ElementData,
   Row,
   Rows,
 } from '@tailor-cms/ce-table-manifest';
@@ -56,7 +67,7 @@ function calculateInsertPosition(
   anchor: Cell | Row,
   direction: Direction,
 ) {
-  const sorted = sortBy(collection, 'position');
+  const sorted = sortBy(collection, 'position') as Cell[] | Row[];
   const adjacent = sibling(sorted, anchor, direction);
   return between(
     anchor.position,
@@ -64,8 +75,8 @@ function calculateInsertPosition(
   );
 }
 
-function getFocusedItem(collection: Cells, current: Cell) {
-  const sorted = sortBy(collection, 'position');
+function getFocusedItem(collection: Cells | Rows, current: Cell | Row) {
+  const sorted = sortBy(collection, 'position') as Cell[] | Row[];
   return (
     sibling(sorted, current, Direction.Before) ||
     sibling(sorted, current, Direction.After)
@@ -82,6 +93,7 @@ const emit = defineEmits(['focus', 'save']);
 
 const bus: any = inject('$elementBus');
 
+const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 const table = computed(() => sortBy(props.element.data.rows, 'position'));
 const rows = computed(() => props.element.data.rows);
 // const embeds = computed(() => props.element.data.embeds);
@@ -106,7 +118,7 @@ const addRow = (cellId: string, direction = Direction.After) => {
   const newRow = { id: uuid(), position, cells: {} };
   forEach(row.cells, ({ position }) => {
     const cellId = uuid();
-    addCell(newRow, { id: cellId, position });
+    addCell(newRow, { id: cellId, position, data: {} });
     addEmbed(embeds, cellId, tableId);
   });
   rows[newRow.id] = newRow;
@@ -124,7 +136,7 @@ const addColumn = (cellId: string, direction = Direction.After) => {
   const position = calculateInsertPosition(row.cells, cell, direction);
   forEach(rows, (row) => {
     const cellId = uuid();
-    addCell(row, { id: cellId, position });
+    addCell(row, { id: cellId, position, data: {} });
     addEmbed(embeds, cellId, tableId);
   });
 
@@ -169,15 +181,10 @@ const removeColumn = (cellId: string) => {
   emit('save', { embeds, rows });
 };
 
-// const saveCell = (element: any) => {
-//   let { embeds } = props.element.data;
-//   if (element) {
-//     embeds = cloneDeep(embeds);
-//     embeds[element.id] = element;
-//   }
-//   emit('save', { embeds });
-// };
-// const elementData = reactive<ElementData>(cloneDeep(props.element.data));
+const saveCell = (element: any) => {
+  elementData.embeds[element.id] = element;
+  emit('save', elementData);
+};
 
 bus.on('addRowBefore', (id: string) => addRow(id, Direction.Before));
 bus.on('addRowAfter', (id: string) => addRow(id, Direction.After));
@@ -193,12 +200,24 @@ bus.on('removeColumn', (id: string) => removeColumn(id));
   margin: 1rem 0;
 }
 
+.body {
+  overflow-y: auto;
+}
+
 .table {
   display: table;
   border-collapse: collapse;
 
   .table-row {
     display: table-row;
+  }
+
+  .table-cell {
+    display: table-cell;
+    border: 1px solid black;
+    width: 312px;
+    max-width: 312px;
+    height: 100%;
   }
 }
 
