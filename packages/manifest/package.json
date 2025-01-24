@@ -23,8 +23,13 @@
   },
   "devDependencies": {
     "@tailor-cms/eslint-config": "0.0.2",
+    "@types/lodash": "^4.17.14",
     "tsup": "^7.2.0",
     "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "uuid": "^11.0.5"
   },
   "tsup": {
     "entry": [

@@ -1,6 +1,23 @@
-// Example counter component
+export type Embed = any;
+export type Embeds = Record<string, Embed>;
+
+export interface Cell {
+  id: string;
+  position: number;
+}
+export type Cells = Record<string, Cell>;
+
+export interface Row {
+  id: string;
+  position: number;
+  cells: Cells;
+}
+export type Rows = Record<string, Row>;
+
 export interface ElementData {
-  count: number;
+  tableId: string;
+  embeds: Embeds;
+  rows: Rows;
 }
 
 export interface Element {
