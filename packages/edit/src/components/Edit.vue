@@ -12,15 +12,14 @@
     <div class="body">
       <div :class="{ disabled: isDisabled }" class="table ma-4">
         <div v-for="row in table" :key="row.id" class="table-row">
-          <div v-for="cell in cells(row)" :key="cell.id" class="table-cell">
-            <TailorEmbeddedContainer
-              :allowed-element-config="embedElementConfig"
-              :container="{ embeds: { [cell.id]: cell } }"
-              :enable-add="false"
-              :is-disabled="isDisabled"
-              @save="saveCell($event.embeds[cell.id])"
-            />
-          </div>
+          <TableCell
+            v-for="cell in cells(row)"
+            :key="cell.id"
+            :cell="embeds[cell.id]"
+            :is-disabled="isDisabled"
+            :table="element"
+            @save="saveCell"
+          />
         </div>
       </div>
     </div>
@@ -48,6 +47,7 @@ import sortBy from 'lodash/sortBy';
 import { v4 as uuid } from 'uuid';
 
 import { addCell, addEmbed, removeCell, removeEmbed } from './utils';
+import TableCell from './TableCell.vue';
 
 const MIN_ROWS = 1;
 const MIN_COLUMNS = 1;
@@ -94,9 +94,9 @@ const emit = defineEmits(['focus', 'save']);
 const bus: any = inject('$elementBus');
 
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
-const table = computed(() => sortBy(props.element.data.rows, 'position'));
-const rows = computed(() => props.element.data.rows);
-// const embeds = computed(() => props.element.data.embeds);
+const table = computed(() => sortBy(elementData.rows, 'position'));
+const rows = computed(() => elementData.rows);
+const embeds = computed(() => elementData.embeds);
 
 const cells = (row: any) => sortBy(row.cells, 'position');
 
@@ -210,14 +210,6 @@ bus.on('removeColumn', (id: string) => removeColumn(id));
 
   .table-row {
     display: table-row;
-  }
-
-  .table-cell {
-    display: table-cell;
-    border: 1px solid black;
-    width: 312px;
-    max-width: 312px;
-    height: 100%;
   }
 }
 

@@ -17,7 +17,7 @@ export function removeCell(row: Row, predicate = {}) {
 export function addEmbed(embeds: Embeds, cellId: string, tableId: string) {
   const embed = {
     id: cellId,
-    type: 'JODIT_HTML',
+    type: 'TIPTAP_HTML',
     embedded: true,
     data: { tableId, cellId },
   };

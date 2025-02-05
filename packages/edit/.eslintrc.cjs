@@ -14,7 +14,7 @@ module.exports = {
     'vue/no-undef-components': [
       'error',
       {
-        ignorePatterns: ['EmbeddedContainer', 'V[A-Z]*'],
+        ignorePatterns: ['EmbeddedContainer', 'ContentElement', 'V[A-Z]*'],
       },
     ],
     'vue/multi-word-component-names': [
