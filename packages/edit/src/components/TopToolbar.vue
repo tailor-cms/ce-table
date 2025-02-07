@@ -24,22 +24,28 @@
 
 <script lang="ts" setup>
 import { computed, inject } from 'vue';
-const props = defineProps<{ element: Element }>();
+
+interface Props {
+  element: Element;
+  embed?: Element | null;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  embed: null,
+});
 
 const elementBus = inject<any>('$elementBus');
 
 const actions = computed(() => [
   { name: 'addRowBefore', label: 'Add row before' },
   { name: 'addRowAfter', label: 'Add row after' },
-  { name: 'addColumnBefore', label: 'Add column before' },
-  { name: 'addColumnAfter', label: 'Add column after' },
+  { name: 'addColBefore', label: 'Add column before' },
+  { name: 'addColAfter', label: 'Add column after' },
   { name: 'removeRow', label: 'Delete row' },
   { name: 'removeColumn', label: 'Delete column' },
 ]);
 
-const trigger = (action: string) => {
-  elementBus.emit(action, props.element?.id);
-};
+const trigger = (action: string) => elementBus.emit(action, props.embed?.id);
 </script>
 
 <style lang="scss" scoped>

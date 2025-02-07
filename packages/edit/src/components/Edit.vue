@@ -91,7 +91,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(['focus', 'save']);
 
-const bus: any = inject('$elementBus');
+const elementBus = inject<any>('$elementBus');
 
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 const table = computed(() => sortBy(elementData.rows, 'position'));
@@ -112,8 +112,7 @@ const addRow = (cellId: string, direction = Direction.After) => {
   const row = findRow(cellId);
   if (!row) return;
 
-  const element = cloneDeep(props.element);
-  const { tableId, rows, embeds } = element.data;
+  const { tableId, rows, embeds } = elementData;
   const position = calculateInsertPosition(rows, row, direction);
   const newRow = { id: uuid(), position, cells: {} };
   forEach(row.cells, ({ position }) => {
@@ -122,7 +121,7 @@ const addRow = (cellId: string, direction = Direction.After) => {
     addEmbed(embeds, cellId, tableId);
   });
   rows[newRow.id] = newRow;
-  emit('save', element.data);
+  emit('save', elementData);
 };
 
 const addColumn = (cellId: string, direction = Direction.After) => {
@@ -131,8 +130,7 @@ const addColumn = (cellId: string, direction = Direction.After) => {
   const cell = row.cells[cellId];
   if (!cell) return;
 
-  const element = cloneDeep(props.element);
-  const { tableId, rows, embeds } = element.data;
+  const { tableId, rows, embeds } = elementData;
   const position = calculateInsertPosition(row.cells, cell, direction);
   forEach(rows, (row) => {
     const cellId = uuid();
@@ -140,15 +138,14 @@ const addColumn = (cellId: string, direction = Direction.After) => {
     addEmbed(embeds, cellId, tableId);
   });
 
-  emit('save', element.data);
+  emit('save', elementData);
 };
 
 const removeRow = (cellId: string) => {
   const row = findRow(cellId);
   if (!row || size(props.element.data.rows) <= MIN_ROWS) return;
 
-  const element = cloneDeep(props.element);
-  const { rows, embeds } = element.data;
+  const { rows, embeds } = elementData;
   forEach(row.cells, (cell) => removeEmbed(embeds, { id: cell.id }));
   delete rows[row.id];
 
@@ -167,8 +164,7 @@ const removeColumn = (cellId: string) => {
   const cell = row.cells[cellId];
   if (!cell) return;
 
-  const element = cloneDeep(props.element);
-  const { rows, embeds } = element.data;
+  const { rows, embeds } = elementData;
 
   forEach(rows, (row) => {
     const deletedCell = removeCell(row, { position: cell.position });
@@ -186,12 +182,12 @@ const saveCell = (element: any) => {
   emit('save', elementData);
 };
 
-bus.on('addRowBefore', (id: string) => addRow(id, Direction.Before));
-bus.on('addRowAfter', (id: string) => addRow(id, Direction.After));
-bus.on('addColumnBefore', (id: string) => addColumn(id, Direction.Before));
-bus.on('addColumnAfter', (id: string) => addColumn(id, Direction.After));
-bus.on('removeRow', (id: string) => removeRow(id));
-bus.on('removeColumn', (id: string) => removeColumn(id));
+elementBus.on('addRowBefore', (id: string) => addRow(id, Direction.Before));
+elementBus.on('addRowAfter', (id: string) => addRow(id, Direction.After));
+elementBus.on('addColBefore', (id: string) => addColumn(id, Direction.Before));
+elementBus.on('addColAfter', (id: string) => addColumn(id, Direction.After));
+elementBus.on('removeRow', (id: string) => removeRow(id));
+elementBus.on('removeCol', (id: string) => removeColumn(id));
 </script>
 
 <style lang="scss" scoped>

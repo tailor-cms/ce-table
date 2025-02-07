@@ -1,12 +1,11 @@
 <template>
-  <div class="table-cell">
-    <TailorContentElement
-      :element="cell"
-      :is-disabled="isDisabled"
-      :parent="table"
-      @save="save"
-    />
-  </div>
+  <TailorContentElement
+    :element="cell"
+    :is-disabled="isDisabled"
+    :parent="table"
+    class="table-cell"
+    @save="save"
+  />
 </template>
 
 <script lang="ts" setup>
