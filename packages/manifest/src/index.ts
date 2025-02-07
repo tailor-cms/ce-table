@@ -60,3 +60,4 @@ const manifest: ElementManifest = {
 
 export default manifest;
 export * from './interfaces';
+export * as utils from './utils';

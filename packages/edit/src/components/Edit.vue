@@ -18,6 +18,12 @@
             :cell="embeds[cell.id]"
             :is-disabled="isDisabled"
             :table="element"
+            @add-col-after="addColumn($event, Direction.After)"
+            @add-col-before="addColumn($event, Direction.Before)"
+            @add-row-after="addRow($event, Direction.After)"
+            @add-row-before="addRow($event, Direction.Before)"
+            @remove-col="removeColumn"
+            @remove-row="removeRow"
             @save="saveCell"
           />
         </div>
@@ -27,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import manifest, {
   Cell,
   Cells,
@@ -36,6 +42,7 @@ import manifest, {
   ElementData,
   Row,
   Rows,
+  utils,
 } from '@tailor-cms/ce-table-manifest';
 import cloneDeep from 'lodash/cloneDeep';
 import find from 'lodash/find';
@@ -46,11 +53,12 @@ import size from 'lodash/size';
 import sortBy from 'lodash/sortBy';
 import { v4 as uuid } from 'uuid';
 
-import { addCell, addEmbed, removeCell, removeEmbed } from './utils';
 import TableCell from './TableCell.vue';
 
 const MIN_ROWS = 1;
 const MIN_COLUMNS = 1;
+
+const { addCell, addEmbed, removeCell, removeEmbed } = utils;
 
 const between = (pos1: number, pos2: number) => (pos2 + pos1) / 2;
 const limit = (anchor: any, direction: number) => anchor.position + direction;
@@ -90,8 +98,6 @@ const props = defineProps<{
   isDisabled: boolean;
 }>();
 const emit = defineEmits(['focus', 'save']);
-
-const elementBus = inject<any>('$elementBus');
 
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 const table = computed(() => sortBy(elementData.rows, 'position'));
@@ -181,13 +187,6 @@ const saveCell = (element: any) => {
   elementData.embeds[element.id] = element;
   emit('save', elementData);
 };
-
-elementBus.on('addRowBefore', (id: string) => addRow(id, Direction.Before));
-elementBus.on('addRowAfter', (id: string) => addRow(id, Direction.After));
-elementBus.on('addColBefore', (id: string) => addColumn(id, Direction.Before));
-elementBus.on('addColAfter', (id: string) => addColumn(id, Direction.After));
-elementBus.on('removeRow', (id: string) => removeRow(id));
-elementBus.on('removeCol', (id: string) => removeColumn(id));
 </script>
 
 <style lang="scss" scoped>
