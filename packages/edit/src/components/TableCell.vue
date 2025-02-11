@@ -28,15 +28,8 @@ import { Direction, type Element } from '@tailor-cms/ce-table-manifest';
 import cloneDeep from 'lodash/cloneDeep';
 import { ref } from 'vue';
 
-enum Event {
-  RowAdd = 'row:add',
-  RowRemove = 'row:remove',
-  ColAdd = 'col:add',
-  ColRemove = 'col:remove',
-}
-
 interface Action {
-  event: Event;
+  event: 'row:add' | 'col:add' | 'row:remove' | 'col:remove';
   direction?: Direction;
   label: string;
   icon: string;
@@ -44,36 +37,36 @@ interface Action {
 
 const actions: Action[] = [
   {
-    event: Event.RowAdd,
+    event: 'row:add',
     direction: Direction.Before,
     label: 'Add row before',
     icon: 'mdi-table-row-plus-before',
   },
   {
-    event: Event.RowAdd,
+    event: 'row:add',
     direction: Direction.After,
     label: 'Add row after',
     icon: 'mdi-table-row-plus-after',
   },
   {
-    event: Event.ColAdd,
+    event: 'col:add',
     direction: Direction.Before,
     label: 'Add column before',
     icon: 'mdi-table-column-plus-before',
   },
   {
-    event: Event.ColAdd,
+    event: 'col:add',
     direction: Direction.After,
     label: 'Add column after',
     icon: 'mdi-table-column-plus-after',
   },
   {
-    event: Event.RowRemove,
+    event: 'row:remove',
     label: 'Delete row',
     icon: 'mdi-table-row-remove',
   },
   {
-    event: Event.ColRemove,
+    event: 'col:remove',
     label: 'Delete column',
     icon: 'mdi-table-column-remove',
   },
