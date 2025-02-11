@@ -18,12 +18,10 @@
             :cell="embeds[cell.id]"
             :is-disabled="isDisabled"
             :table="element"
-            @add-col-after="addColumn($event, Direction.After)"
-            @add-col-before="addColumn($event, Direction.Before)"
-            @add-row-after="addRow($event, Direction.After)"
-            @add-row-before="addRow($event, Direction.Before)"
-            @remove-col="removeColumn"
-            @remove-row="removeRow"
+            @col:add="addColumn(cell.id, $event)"
+            @col:remove="removeColumn(cell.id)"
+            @row:add="addRow(cell.id, $event)"
+            @row:remove="removeRow(cell.id)"
             @save="saveCell"
           />
         </div>

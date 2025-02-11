@@ -29,10 +29,10 @@ import cloneDeep from 'lodash/cloneDeep';
 import { ref } from 'vue';
 
 enum Event {
-  AddRow = 'addRow',
-  AddCol = 'addCol',
-  RemoveRow = 'removeRow',
-  RemoveCol = 'removeCol',
+  RowAdd = 'row:add',
+  RowRemove = 'row:remove',
+  ColAdd = 'col:add',
+  ColRemove = 'col:remove',
 }
 
 interface Action {
@@ -44,36 +44,36 @@ interface Action {
 
 const actions: Action[] = [
   {
-    event: Event.AddRow,
+    event: Event.RowAdd,
     direction: Direction.Before,
     label: 'Add row before',
     icon: 'mdi-table-row-plus-before',
   },
   {
-    event: Event.AddRow,
+    event: Event.RowAdd,
     direction: Direction.After,
     label: 'Add row after',
     icon: 'mdi-table-row-plus-after',
   },
   {
-    event: Event.AddCol,
+    event: Event.ColAdd,
     direction: Direction.Before,
     label: 'Add column before',
     icon: 'mdi-table-column-plus-before',
   },
   {
-    event: Event.AddCol,
+    event: Event.ColAdd,
     direction: Direction.After,
     label: 'Add column after',
     icon: 'mdi-table-column-plus-after',
   },
   {
-    event: Event.RemoveRow,
+    event: Event.RowRemove,
     label: 'Delete row',
     icon: 'mdi-table-row-remove',
   },
   {
-    event: Event.RemoveCol,
+    event: Event.ColRemove,
     label: 'Delete column',
     icon: 'mdi-table-column-remove',
   },
@@ -87,10 +87,10 @@ const props = defineProps<{
 
 const emit = defineEmits([
   'save',
-  'addRow',
-  'addCol',
-  'removeRow',
-  'removeCol',
+  'col:add',
+  'col:remove',
+  'row:add',
+  'row:remove',
 ]);
 
 const menu = ref(false);
