@@ -1,24 +1,28 @@
 <template>
-  <VMenu v-model="menu" location="top center" min-width="216">
-    <template #activator="{ props: activatorProps }">
-      <TailorContentElement
-        v-bind="activatorProps"
-        :element="cell"
-        :is-disabled="isDisabled"
-        :parent="table"
-        class="table-cell"
-        @click="openMenu"
-        @save="save"
-      />
-    </template>
-    <VBtnGroup density="comfortable" elevation="4" rounded="lg">
+  <TailorContentElement
+    :id="`cell-menu-${cell.id}`"
+    :element="cell"
+    :is-disabled="isDisabled"
+    :parent="table"
+    class="table-cell"
+    @save="save"
+  />
+  <VMenu
+    :activator="`#cell-menu-${cell.id}`"
+    location="top center"
+    min-width="216"
+  >
+    <VBtnGroup density="comfortable" elevation="4" rounded="lg" divided>
       <VBtn
         v-for="action in actions"
         :key="action.label"
         v-tooltip="action.label"
-        :icon="action.icon"
+        size="large"
+        icon
         @click="emit(action.event, action.direction)"
-      />
+      >
+        <VIcon>{{ action.icon }}</VIcon>
+      </VBtn>
     </VBtnGroup>
   </VMenu>
 </template>
@@ -26,7 +30,6 @@
 <script lang="ts" setup>
 import { Direction, type Element } from '@tailor-cms/ce-table-manifest';
 import cloneDeep from 'lodash/cloneDeep';
-import { ref } from 'vue';
 
 interface Action {
   event: 'row:add' | 'col:add' | 'row:remove' | 'col:remove';
@@ -86,9 +89,6 @@ const emit = defineEmits([
   'row:remove',
 ]);
 
-const menu = ref(false);
-
-const openMenu = () => (menu.value = true);
 const save = (data: any) => emit('save', { ...cloneDeep(props.cell), data });
 </script>
 
@@ -99,5 +99,6 @@ const save = (data: any) => emit('save', { ...cloneDeep(props.cell), data });
   width: 312px;
   max-width: 312px;
   height: 100%;
+  vertical-align: top;
 }
 </style>
