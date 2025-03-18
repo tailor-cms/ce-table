@@ -1,5 +1,11 @@
 # @tailor-cms/ce-table-server
 
+## 0.0.3
+
+### Patch Changes
+
+- Replace HTML Element with Jodit.
+
 ## 0.0.2
 
 ### Patch Changes
