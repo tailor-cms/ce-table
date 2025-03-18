@@ -4,6 +4,7 @@
     :element="cell"
     :is-disabled="isDisabled"
     :parent="table"
+    :show-placeholder="false"
     class="table-cell"
     @save="save"
   />

@@ -109,7 +109,7 @@ const findRow = (cellId: string) => {
 };
 
 const focusElement = (cell: any) => {
-  emit('focus', {}, { ...cell, type: 'HTML' }, props.element);
+  emit('focus', {}, { ...cell, type: 'JODIT_HTML' }, props.element);
 };
 
 const addRow = (cellId: string, direction = Direction.After) => {
