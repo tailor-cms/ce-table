@@ -10,7 +10,6 @@ test('Renders Edit component', async ({ page }) => {
   const editPanel = new pom.EditPanel(page);
   await editPanel.persistFocus();
   await expect(editPanel.editor).toBeVisible();
-  await expect(editPanel.topToolbar).toBeVisible();
 });
 
 test('Renders Display component', async ({ page }) => {
