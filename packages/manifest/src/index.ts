@@ -1,4 +1,4 @@
-import times from 'lodash/times';
+import { times } from 'lodash-es';
 import { v4 as uuid } from 'uuid';
 
 import { addCell, addEmbed } from './utils';

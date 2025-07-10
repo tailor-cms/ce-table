@@ -10,13 +10,13 @@
       <span class="text-subtitle-2">{{ manifest.name }}</span>
     </VToolbar>
     <div class="body">
-      <div :class="{ disabled: isDisabled }" class="table ma-4">
+      <div :class="{ readonly: isReadonly }" class="table ma-4">
         <div v-for="row in table" :key="row.id" class="table-row">
           <TableCell
             v-for="cell in cells(row)"
             :key="cell.id"
             :cell="embeds[cell.id]"
-            :is-disabled="isDisabled"
+            :is-readonly="isReadonly"
             :table="element"
             @col:add="addColumn(cell.id, $event)"
             @col:remove="removeColumn(cell.id)"
@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import { cloneDeep, find, first, forEach, last, size, sortBy } from 'lodash-es';
 import { computed, reactive } from 'vue';
 import manifest, {
   Cell,
@@ -42,13 +43,6 @@ import manifest, {
   Rows,
   utils,
 } from '@tailor-cms/ce-table-manifest';
-import cloneDeep from 'lodash/cloneDeep';
-import find from 'lodash/find';
-import first from 'lodash/first';
-import forEach from 'lodash/forEach';
-import last from 'lodash/last';
-import size from 'lodash/size';
-import sortBy from 'lodash/sortBy';
 import { v4 as uuid } from 'uuid';
 
 import TableCell from './TableCell.vue';
@@ -92,8 +86,9 @@ function getFocusedItem(collection: Cells | Rows, current: Cell | Row) {
 const props = defineProps<{
   element: Element;
   embedElementConfig: any[];
+  isDragged: boolean;
   isFocused: boolean;
-  isDisabled: boolean;
+  isReadonly: boolean;
 }>();
 const emit = defineEmits(['focus', 'save']);
 
@@ -206,7 +201,7 @@ const saveCell = (element: any) => {
   }
 }
 
-.disabled {
+.readonly {
   pointer-events: none;
 }
 </style>

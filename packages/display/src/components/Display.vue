@@ -1,5 +1,5 @@
 <template>
-  <div class="tce-root">
+  <div class="tce-table-root">
     <div class="table">
       <div v-for="row in table" :key="row.id" class="table-row">
         <div v-for="cell in row.cells" :key="cell.id" class="table-cell">
@@ -14,12 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { Cell, ElementData, Row } from '@tailor-cms/ce-table-manifest';
+import { Cell, Element, Row } from '@tailor-cms/ce-table-manifest';
+import { get, sortBy } from 'lodash-es';
 import { computed } from 'vue';
-import get from 'lodash/get';
-import sortBy from 'lodash/sortBy';
 
-const props = defineProps<{ data: ElementData; userState: any }>();
+const props = defineProps<{ element: Element; userState: any }>();
 defineEmits(['interaction']);
 
 const mapCell = (cell: Cell, embeds: Record<string, any>) => {
@@ -35,18 +34,13 @@ const mapRow = (row: Row, embeds: Record<string, any>) => {
 };
 
 const table = computed(() => {
-  return sortBy(props.data.rows, 'position').map((row) =>
-    mapRow(row, props.data.embeds),
+  return sortBy(props.element.data.rows, 'position').map((row) =>
+    mapRow(row, props.element.data.embeds),
   );
 });
 </script>
 
 <style scoped>
-.tce-root {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1rem;
-}
-
 .table {
   display: table;
   border-collapse: collapse;

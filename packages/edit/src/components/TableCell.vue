@@ -1,8 +1,9 @@
+<!-- eslint-disable vue/no-undef-components -->
 <template>
   <TailorContentElement
     :id="`cell-menu-${cell.id}`"
     :element="cell"
-    :is-disabled="isDisabled"
+    :is-disabled="isReadonly"
     :parent="table"
     :show-placeholder="false"
     class="table-cell"
@@ -30,7 +31,7 @@
 
 <script lang="ts" setup>
 import { Direction, type Element } from '@tailor-cms/ce-table-manifest';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from 'lodash-es';
 
 interface Action {
   event: 'row:add' | 'col:add' | 'row:remove' | 'col:remove';
@@ -79,7 +80,7 @@ const actions: Action[] = [
 const props = defineProps<{
   cell: Element;
   table: Element;
-  isDisabled: boolean;
+  isReadonly: boolean;
 }>();
 
 const emit = defineEmits([
