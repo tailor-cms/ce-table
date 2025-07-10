@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import { cloneDeep, find, first, forEach, last, size, sortBy } from 'lodash-es';
 import { computed, reactive } from 'vue';
 import manifest, {
   Cell,
@@ -42,13 +43,6 @@ import manifest, {
   Rows,
   utils,
 } from '@tailor-cms/ce-table-manifest';
-import cloneDeep from 'lodash/cloneDeep';
-import find from 'lodash/find';
-import first from 'lodash/first';
-import forEach from 'lodash/forEach';
-import last from 'lodash/last';
-import size from 'lodash/size';
-import sortBy from 'lodash/sortBy';
 import { v4 as uuid } from 'uuid';
 
 import TableCell from './TableCell.vue';

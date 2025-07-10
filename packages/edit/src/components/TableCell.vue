@@ -30,7 +30,7 @@
 
 <script lang="ts" setup>
 import { Direction, type Element } from '@tailor-cms/ce-table-manifest';
-import cloneDeep from 'lodash/cloneDeep';
+import { cloneDeep } from 'lodash-es';
 
 interface Action {
   event: 'row:add' | 'col:add' | 'row:remove' | 'col:remove';
