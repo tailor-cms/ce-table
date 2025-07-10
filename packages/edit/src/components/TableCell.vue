@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-undef-components -->
 <template>
   <TailorContentElement
     :id="`cell-menu-${cell.id}`"

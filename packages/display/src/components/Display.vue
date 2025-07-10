@@ -1,5 +1,5 @@
 <template>
-  <div class="tce-root">
+  <div class="tce-table-root">
     <div class="table">
       <div v-for="row in table" :key="row.id" class="table-row">
         <div v-for="cell in row.cells" :key="cell.id" class="table-cell">
@@ -41,11 +41,6 @@ const table = computed(() => {
 </script>
 
 <style scoped>
-.tce-root {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1rem;
-}
-
 .table {
   display: table;
   border-collapse: collapse;

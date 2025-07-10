@@ -15,13 +15,5 @@ export default [
         extraFileExtensions: ['.vue'],
       },
     },
-    rules: {
-      'vue/no-undef-components': [
-        'error',
-        {
-          ignorePatterns: ['EmbeddedContainer', 'ContentElement', 'V[A-Z]*'],
-        },
-      ],
-    },
   },
 ];
