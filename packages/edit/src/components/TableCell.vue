@@ -2,7 +2,7 @@
   <TailorContentElement
     :id="`cell-menu-${cell.id}`"
     :element="cell"
-    :is-disabled="isDisabled"
+    :is-disabled="isReadonly"
     :parent="table"
     :show-placeholder="false"
     class="table-cell"
@@ -79,7 +79,7 @@ const actions: Action[] = [
 const props = defineProps<{
   cell: Element;
   table: Element;
-  isDisabled: boolean;
+  isReadonly: boolean;
 }>();
 
 const emit = defineEmits([

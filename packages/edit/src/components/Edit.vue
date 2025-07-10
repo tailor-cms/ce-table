@@ -10,13 +10,13 @@
       <span class="text-subtitle-2">{{ manifest.name }}</span>
     </VToolbar>
     <div class="body">
-      <div :class="{ disabled: isDisabled }" class="table ma-4">
+      <div :class="{ readonly: isReadonly }" class="table ma-4">
         <div v-for="row in table" :key="row.id" class="table-row">
           <TableCell
             v-for="cell in cells(row)"
             :key="cell.id"
             :cell="embeds[cell.id]"
-            :is-disabled="isDisabled"
+            :is-readonly="isReadonly"
             :table="element"
             @col:add="addColumn(cell.id, $event)"
             @col:remove="removeColumn(cell.id)"
@@ -92,8 +92,9 @@ function getFocusedItem(collection: Cells | Rows, current: Cell | Row) {
 const props = defineProps<{
   element: Element;
   embedElementConfig: any[];
+  isDragged: boolean;
   isFocused: boolean;
-  isDisabled: boolean;
+  isReadonly: boolean;
 }>();
 const emit = defineEmits(['focus', 'save']);
 
@@ -206,7 +207,7 @@ const saveCell = (element: any) => {
   }
 }
 
-.disabled {
+.readonly {
   pointer-events: none;
 }
 </style>
