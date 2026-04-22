@@ -31,11 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import { cloneDeep, find, first, forEach, last, size, sortBy } from 'lodash-es';
-import { computed, reactive } from 'vue';
-import manifest, {
-  Direction,
-} from '@tailor-cms/ce-table-manifest';
 import type {
   Cell,
   Cells,
@@ -44,6 +39,9 @@ import type {
   Row,
   Rows,
 } from '@tailor-cms/ce-table-manifest';
+import { cloneDeep, find, first, forEach, last, size, sortBy } from 'lodash-es';
+import { computed, reactive } from 'vue';
+import manifest, { Direction } from '@tailor-cms/ce-table-manifest';
 import { utils } from '@tailor-cms/ce-table-manifest';
 import { v4 as uuid } from 'uuid';
 
