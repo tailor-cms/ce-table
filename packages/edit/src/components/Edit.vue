@@ -34,15 +34,17 @@
 import { cloneDeep, find, first, forEach, last, size, sortBy } from 'lodash-es';
 import { computed, reactive } from 'vue';
 import manifest, {
+  Direction,
+} from '@tailor-cms/ce-table-manifest';
+import type {
   Cell,
   Cells,
-  Direction,
   Element,
   ElementData,
   Row,
   Rows,
-  utils,
 } from '@tailor-cms/ce-table-manifest';
+import { utils } from '@tailor-cms/ce-table-manifest';
 import { v4 as uuid } from 'uuid';
 
 import TableCell from './TableCell.vue';
@@ -90,7 +92,10 @@ const props = defineProps<{
   isFocused: boolean;
   isReadonly: boolean;
 }>();
-const emit = defineEmits(['focus', 'save']);
+const emit = defineEmits<{
+  focus: [context: Record<string, any>, element: any, parent: Element];
+  save: [data: ElementData];
+}>();
 
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
 const table = computed(() => sortBy(elementData.rows, 'position'));
@@ -154,7 +159,7 @@ const removeRow = (cellId: string) => {
     if (cell) focusElement(embeds[cell.id]);
   }
 
-  emit('save', { embeds, rows });
+  emit('save', elementData);
 };
 
 const removeColumn = (cellId: string) => {
@@ -173,7 +178,7 @@ const removeColumn = (cellId: string) => {
   const focusedCell = getFocusedItem(row.cells, cell);
   if (focusedCell) focusElement(embeds[focusedCell.id]);
 
-  emit('save', { embeds, rows });
+  emit('save', elementData);
 };
 
 const saveCell = (element: any) => {

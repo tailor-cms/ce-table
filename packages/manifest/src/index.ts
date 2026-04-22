@@ -1,3 +1,4 @@
+import type { AiConfig } from '@tailor-cms/cek-common';
 import { times } from 'lodash-es';
 import { v4 as uuid } from 'uuid';
 
@@ -18,7 +19,6 @@ export const name = 'Table';
 
 // Function which inits element state (data property on the Content Element
 // entity)
-// e.g. for simple counter component:
 export const initState: DataInitializer = (): ElementData => {
   const tableId = uuid();
   const embeds: Embeds = {};
@@ -48,14 +48,89 @@ const ui = {
   forceFullWidth: true,
 };
 
+export const isEmpty = (data: ElementData): boolean => {
+  const rows = data?.rows ?? {};
+  const rowKeys = Object.keys(rows);
+  if (rowKeys.length === 0) return true;
+  return rowKeys.every((rowId) => {
+    const cells = rows[rowId]?.cells ?? {};
+    return Object.keys(cells).length === 0;
+  });
+};
+
+export const ai: AiConfig = {
+  Schema: {
+    type: 'json_schema',
+    name: 'ce_table',
+    schema: {
+      type: 'object',
+      properties: {
+        rows: {
+          type: 'array',
+          minItems: 1,
+          items: {
+            type: 'object',
+            properties: {
+              cells: {
+                type: 'array',
+                minItems: 1,
+                items: { type: 'string' },
+              },
+            },
+            required: ['cells'],
+            additionalProperties: false,
+          },
+        },
+      },
+      required: ['rows'],
+      additionalProperties: false,
+    },
+  },
+  getPrompt: () => `
+    Generate a table content element as an object with the following
+    properties:
+    {
+      "rows": [
+        { "cells": ["", ""] }
+      ]
+    }
+    where:
+    - 'rows' is an array of row objects.
+    - each row has a 'cells' array of plain text strings (one per cell).
+      Every row must have the same number of cells.
+  `,
+  processResponse: (val: any) => {
+    const tableId = uuid();
+    const rows: Rows = {};
+    const embeds: Embeds = {};
+    val.rows.forEach((row: { cells: string[] }, rowPosition: number) => {
+      const rowId = uuid();
+      rows[rowId] = { id: rowId, position: rowPosition, cells: {} };
+      row.cells.forEach((content: string, cellPosition: number) => {
+        const cellId = uuid();
+        addCell(rows[rowId], {
+          id: cellId,
+          position: cellPosition,
+          data: {},
+        });
+        const embed = addEmbed(embeds, cellId, tableId);
+        embed.data.content = content;
+      });
+    });
+    return { tableId, rows, embeds };
+  },
+};
+
 const manifest: ElementManifest = {
   type,
-  version: '1.0',
+  version,
   name,
   ssr: false,
   isComposite: true,
   initState,
+  isEmpty,
   ui,
+  ai,
 };
 
 export default manifest;

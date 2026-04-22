@@ -14,12 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { Cell, Element, Row } from '@tailor-cms/ce-table-manifest';
+import type { Cell, Element, Row } from '@tailor-cms/ce-table-manifest';
 import { get, sortBy } from 'lodash-es';
 import { computed } from 'vue';
 
-const props = defineProps<{ element: Element; userState: any }>();
-defineEmits(['interaction']);
+const props = defineProps<{ element: Element }>();
 
 const mapCell = (cell: Cell, embeds: Record<string, any>) => {
   const content = get(embeds[cell.id], 'data.content');
@@ -52,7 +51,7 @@ const table = computed(() => {
   .table-cell {
     display: table-cell;
     width: 312px;
-    border: 1px solid black;
+    border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
 
     .cell {
       padding: 0;
