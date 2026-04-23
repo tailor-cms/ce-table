@@ -48,15 +48,8 @@ const ui = {
   forceFullWidth: true,
 };
 
-export const isEmpty = (data: ElementData): boolean => {
-  const rows = data?.rows ?? {};
-  const rowKeys = Object.keys(rows);
-  if (rowKeys.length === 0) return true;
-  return rowKeys.every((rowId) => {
-    const cells = rows[rowId]?.cells ?? {};
-    return Object.keys(cells).length === 0;
-  });
-};
+export const isEmpty = (data: ElementData): boolean =>
+  !data?.rows || Object.keys(data.rows).length === 0;
 
 export const ai: AiConfig = {
   Schema: {
