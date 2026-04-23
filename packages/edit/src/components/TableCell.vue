@@ -19,6 +19,7 @@
         v-for="action in actions"
         :key="action.label"
         v-tooltip="action.label"
+        :aria-label="action.label"
         :icon="action.icon"
         size="large"
         @click="(emit as any)(action.event, action.direction)"
