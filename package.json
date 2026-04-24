@@ -2,7 +2,6 @@
   "name": "@tailor-cms/ce-table",
   "description": "Tailor CMS table element",
   "author": "Studion <info@gostudion.com> (https://github.com/tailor-cms)",
-  "version": "0.0.1",
   "type": "module",
   "private": true,
   "scripts": {
