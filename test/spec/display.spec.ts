@@ -7,6 +7,7 @@ const ELEMENT_ID = 'test-table-display';
 
 test.beforeEach(async ({ page }) => {
   await elementClient.reset(ELEMENT_ID);
+  await elementClient.resetState(ELEMENT_ID);
   await page.goto(`/?id=${ELEMENT_ID}`);
   await page.waitForLoadState('networkidle');
 });
@@ -45,8 +46,4 @@ test.describe('With cell content', () => {
     const display = new Display(page);
     await expect(display.cells.first().locator('p')).toHaveText('Hello');
   });
-});
-
-test.afterAll(async () => {
-  await elementClient.reset(ELEMENT_ID);
 });

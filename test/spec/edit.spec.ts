@@ -58,7 +58,3 @@ test.describe('Readonly mode', () => {
     await expect(edit.table).toHaveClass(/readonly/);
   });
 });
-
-test.afterAll(async () => {
-  await elementClient.reset(ELEMENT_ID);
-});
