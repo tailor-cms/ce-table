@@ -19,19 +19,19 @@
         v-for="action in actions"
         :key="action.label"
         v-tooltip="action.label"
+        :aria-label="action.label"
+        :icon="action.icon"
         size="large"
-        icon
-        @click="emit(action.event, action.direction)"
-      >
-        <VIcon>{{ action.icon }}</VIcon>
-      </VBtn>
+        @click="(emit as any)(action.event, action.direction)"
+      />
     </VBtnGroup>
   </VMenu>
 </template>
 
 <script lang="ts" setup>
-import { Direction, type Element } from '@tailor-cms/ce-table-manifest';
 import { cloneDeep } from 'lodash-es';
+import { Direction } from '@tailor-cms/ce-table-manifest';
+import type { Element } from '@tailor-cms/ce-table-manifest';
 
 interface Action {
   event: 'row:add' | 'col:add' | 'row:remove' | 'col:remove';
@@ -83,15 +83,16 @@ const props = defineProps<{
   isReadonly: boolean;
 }>();
 
-const emit = defineEmits([
-  'save',
-  'col:add',
-  'col:remove',
-  'row:add',
-  'row:remove',
-]);
+const emit = defineEmits<{
+  save: [element: Element];
+  'col:add': [direction?: Direction];
+  'col:remove': [];
+  'row:add': [direction?: Direction];
+  'row:remove': [];
+}>();
 
-const save = (data: any) => emit('save', { ...cloneDeep(props.cell), data });
+const save = (data: any) =>
+  emit('save', { ...cloneDeep(props.cell), data } as Element);
 </script>
 
 <style lang="scss" scoped>
