@@ -39,8 +39,17 @@ import type {
   Row,
   Rows,
 } from '@tailor-cms/ce-table-manifest';
-import { cloneDeep, find, first, forEach, last, size, sortBy } from 'lodash-es';
-import { computed, reactive } from 'vue';
+import {
+  cloneDeep,
+  find,
+  first,
+  forEach,
+  isEqual,
+  last,
+  size,
+  sortBy,
+} from 'lodash-es';
+import { computed, reactive, watch } from 'vue';
 import manifest, { Direction } from '@tailor-cms/ce-table-manifest';
 import { utils } from '@tailor-cms/ce-table-manifest';
 import { v4 as uuid } from 'uuid';
@@ -96,6 +105,7 @@ const emit = defineEmits<{
 }>();
 
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
+
 const table = computed(() => sortBy(elementData.rows, 'position'));
 const rows = computed(() => elementData.rows);
 const embeds = computed(() => elementData.embeds);
@@ -183,6 +193,14 @@ const saveCell = (element: any) => {
   elementData.embeds[element.id] = element;
   emit('save', elementData);
 };
+
+watch(
+  () => props.element.data,
+  (data) => {
+    if (isEqual(data, elementData)) return;
+    Object.assign(elementData, cloneDeep(data));
+  },
+);
 </script>
 
 <style lang="scss" scoped>
