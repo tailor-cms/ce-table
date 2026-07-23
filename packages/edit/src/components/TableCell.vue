@@ -99,8 +99,8 @@ const save = (data: any) =>
 .table-cell {
   display: table-cell;
   border: 1px solid black;
-  width: 312px;
-  max-width: 312px;
+  width: 24rem;
+  max-width: 24rem;
   height: 100%;
   vertical-align: top;
 }

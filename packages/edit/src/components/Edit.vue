@@ -1,33 +1,22 @@
 <template>
-  <VCard class="tce-table my-2" color="grey-lighten-5">
-    <VToolbar class="px-4" color="primary-darken-2" height="36">
-      <VIcon
-        :icon="manifest.ui.icon"
-        color="secondary-lighten-2"
-        size="18"
-        start
-      />
-      <span class="text-subtitle-2">{{ manifest.name }}</span>
-    </VToolbar>
-    <div class="body">
-      <div :class="{ readonly: isReadonly }" class="table ma-4">
-        <div v-for="row in table" :key="row.id" class="table-row">
-          <TableCell
-            v-for="cell in cells(row)"
-            :key="cell.id"
-            :cell="embeds[cell.id]"
-            :is-readonly="isReadonly"
-            :table="element"
-            @col:add="addColumn(cell.id, $event)"
-            @col:remove="removeColumn(cell.id)"
-            @row:add="addRow(cell.id, $event)"
-            @row:remove="removeRow(cell.id)"
-            @save="saveCell"
-          />
-        </div>
+  <div class="tce-table">
+    <div :class="{ readonly: isReadonly }" class="table">
+      <div v-for="row in table" :key="row.id" class="table-row">
+        <TableCell
+          v-for="cell in cells(row)"
+          :key="cell.id"
+          :cell="embeds[cell.id]"
+          :is-readonly="isReadonly"
+          :table="element"
+          @col:add="addColumn(cell.id, $event)"
+          @col:remove="removeColumn(cell.id)"
+          @row:add="addRow(cell.id, $event)"
+          @row:remove="removeRow(cell.id)"
+          @save="saveCell"
+        />
       </div>
     </div>
-  </VCard>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -50,7 +39,7 @@ import {
   sortBy,
 } from 'lodash-es';
 import { computed, reactive, watch } from 'vue';
-import manifest, { Direction } from '@tailor-cms/ce-table-manifest';
+import { Direction } from '@tailor-cms/ce-table-manifest';
 import { utils } from '@tailor-cms/ce-table-manifest';
 import { v4 as uuid } from 'uuid';
 
@@ -204,12 +193,8 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.tce-accordion {
+.tce-table {
   text-align: left;
-  margin: 1rem 0;
-}
-
-.body {
   overflow-y: auto;
 }
 
