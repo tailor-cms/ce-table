@@ -1,33 +1,22 @@
 <template>
-  <VCard class="tce-table my-2" color="grey-lighten-5">
-    <VToolbar class="px-4" color="primary-darken-2" height="36">
-      <VIcon
-        :icon="manifest.ui.icon"
-        color="secondary-lighten-2"
-        size="18"
-        start
-      />
-      <span class="text-subtitle-2">{{ manifest.name }}</span>
-    </VToolbar>
-    <div class="body">
-      <div :class="{ readonly: isReadonly }" class="table ma-4">
-        <div v-for="row in table" :key="row.id" class="table-row">
-          <TableCell
-            v-for="cell in cells(row)"
-            :key="cell.id"
-            :cell="embeds[cell.id]"
-            :is-readonly="isReadonly"
-            :table="element"
-            @col:add="addColumn(cell.id, $event)"
-            @col:remove="removeColumn(cell.id)"
-            @row:add="addRow(cell.id, $event)"
-            @row:remove="removeRow(cell.id)"
-            @save="saveCell"
-          />
-        </div>
+  <div class="tce-table">
+    <div :class="{ readonly: isReadonly }" class="table">
+      <div v-for="row in table" :key="row.id" class="table-row">
+        <TableCell
+          v-for="cell in cells(row)"
+          :key="cell.id"
+          :cell="embeds[cell.id]"
+          :is-readonly="isReadonly"
+          :table="element"
+          @col:add="addColumn(cell.id, $event)"
+          @col:remove="removeColumn(cell.id)"
+          @row:add="addRow(cell.id, $event)"
+          @row:remove="removeRow(cell.id)"
+          @save="saveCell"
+        />
       </div>
     </div>
-  </VCard>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -39,9 +28,18 @@ import type {
   Row,
   Rows,
 } from '@tailor-cms/ce-table-manifest';
-import { cloneDeep, find, first, forEach, last, size, sortBy } from 'lodash-es';
-import { computed, reactive } from 'vue';
-import manifest, { Direction } from '@tailor-cms/ce-table-manifest';
+import {
+  cloneDeep,
+  find,
+  first,
+  forEach,
+  isEqual,
+  last,
+  size,
+  sortBy,
+} from 'lodash-es';
+import { computed, reactive, watch } from 'vue';
+import { Direction } from '@tailor-cms/ce-table-manifest';
 import { utils } from '@tailor-cms/ce-table-manifest';
 import { v4 as uuid } from 'uuid';
 
@@ -96,6 +94,7 @@ const emit = defineEmits<{
 }>();
 
 const elementData = reactive<ElementData>(cloneDeep(props.element.data));
+
 const table = computed(() => sortBy(elementData.rows, 'position'));
 const rows = computed(() => elementData.rows);
 const embeds = computed(() => elementData.embeds);
@@ -183,15 +182,19 @@ const saveCell = (element: any) => {
   elementData.embeds[element.id] = element;
   emit('save', elementData);
 };
+
+watch(
+  () => props.element.data,
+  (data) => {
+    if (isEqual(data, elementData)) return;
+    Object.assign(elementData, cloneDeep(data));
+  },
+);
 </script>
 
 <style lang="scss" scoped>
-.tce-accordion {
+.tce-table {
   text-align: left;
-  margin: 1rem 0;
-}
-
-.body {
   overflow-y: auto;
 }
 
