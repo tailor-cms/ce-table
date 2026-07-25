@@ -5,6 +5,8 @@
         <TableCell
           v-for="cell in cells(row)"
           :key="cell.id"
+          :can-remove-column="canRemoveColumn(row)"
+          :can-remove-row="canRemoveRow"
           :cell="embeds[cell.id]"
           :is-readonly="isReadonly"
           :table="element"
@@ -45,8 +47,8 @@ import { v4 as uuid } from 'uuid';
 
 import TableCell from './TableCell.vue';
 
-const MIN_ROWS = 1;
-const MIN_COLUMNS = 1;
+const MIN_ROWS = 2;
+const MIN_COLUMNS = 2;
 
 const { addCell, addEmbed, removeCell, removeEmbed } = utils;
 
@@ -101,6 +103,9 @@ const embeds = computed(() => elementData.embeds);
 
 const cells = (row: any) => sortBy(row.cells, 'position');
 
+const canRemoveRow = computed(() => size(elementData.rows) > MIN_ROWS);
+const canRemoveColumn = (row: Row) => size(row.cells) > MIN_COLUMNS;
+
 const findRow = (cellId: string) => {
   return find(rows.value, (row) => !!row.cells[cellId]);
 };
@@ -144,7 +149,7 @@ const addColumn = (cellId: string, direction = Direction.After) => {
 
 const removeRow = (cellId: string) => {
   const row = findRow(cellId);
-  if (!row || size(props.element.data.rows) <= MIN_ROWS) return;
+  if (!row || size(elementData.rows) <= MIN_ROWS) return;
 
   const { rows, embeds } = elementData;
   forEach(row.cells, (cell) => removeEmbed(embeds, { id: cell.id }));
@@ -200,6 +205,9 @@ watch(
 
 .table {
   display: table;
+  // Table layout treats this as a minimum; it gives cells a resolvable height
+  // so their contents can stretch via `height: 100%`.
+  height: 1px;
   border-collapse: collapse;
 
   .table-row {

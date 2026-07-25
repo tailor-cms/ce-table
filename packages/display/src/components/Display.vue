@@ -1,15 +1,15 @@
 <template>
-  <div class="tce-table-root">
-    <div class="table">
-      <div v-for="row in table" :key="row.id" class="table-row">
-        <div v-for="cell in row.cells" :key="cell.id" class="table-cell">
-          <div class="cell col-xs-12">
+  <div class="tce-table-root" tabindex="0">
+    <table class="table">
+      <tbody>
+        <tr v-for="row in table" :key="row.id" class="table-row">
+          <td v-for="cell in row.cells" :key="cell.id" class="table-cell">
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div class="cell-content" v-html="cell.content"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -40,32 +40,39 @@ const table = computed(() => {
 </script>
 
 <style scoped>
+/* Wide tables scroll instead of compressing columns to unreadable slivers. */
+.tce-table-root {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
 .table {
-  display: table;
   border-collapse: collapse;
+  inline-size: max-content;
+  max-inline-size: 100%;
+}
 
-  .table-row {
-    display: table-row;
-  }
+.table-cell {
+  min-width: 12rem;
+  padding: 0.75rem 1rem;
+  /* The M3 `outline-*` roles are not defined in the display runtime's theme. */
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: break-word;
+}
 
-  .table-cell {
-    display: table-cell;
-    width: 312px;
-    border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+/* Keep the authored rich text's spacing, flush with the cell padding. */
+.cell-content > :first-child {
+  margin-block-start: 0;
+}
 
-    .cell {
-      padding: 0;
+.cell-content > :last-child {
+  margin-block-end: 0;
+}
 
-      .cell-content {
-        min-height: 42px;
-        padding: 12px 15px;
-
-        * {
-          margin: 0;
-          padding: 0;
-        }
-      }
-    }
-  }
+.cell-content :where(ul, ol) {
+  padding-inline-start: 1.25rem;
 }
 </style>
