@@ -7,6 +7,7 @@
     :parent="table"
     :show-placeholder="false"
     class="table-cell"
+    variant="field"
     @save="save"
   />
   <VMenu
