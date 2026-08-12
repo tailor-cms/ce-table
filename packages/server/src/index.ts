@@ -1,15 +1,12 @@
-import { ai, initState, type } from '@tailor-cms/ce-table-manifest';
 import type { HookMap, ServerModule } from '@tailor-cms/cek-common';
 import type { Element } from '@tailor-cms/ce-table-manifest';
+import manifest from '@tailor-cms/ce-table-manifest';
 
 export const hookMap: HookMap<Element> = new Map();
 
 const serverModule: ServerModule<Element> = {
-  type,
-  initState,
+  ...manifest,
   hookMap,
-  ai,
 };
 
 export default serverModule;
-export { type, initState, ai };
