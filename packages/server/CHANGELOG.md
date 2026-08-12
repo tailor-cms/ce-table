@@ -1,5 +1,16 @@
 # @tailor-cms/ce-table-server
 
+## 2.1.0
+
+### Minor Changes
+
+- Migrate to the latest CEK version.
+
+### Patch Changes
+
+- Updated dependencies
+  - @tailor-cms/ce-table-manifest@2.1.0
+
 ## 2.0.5
 
 ### Patch Changes
